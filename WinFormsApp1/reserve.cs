@@ -6,8 +6,10 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace WinFormsApp1
 {
@@ -16,6 +18,16 @@ namespace WinFormsApp1
         public reserve()
         {
             InitializeComponent();
+        }
+        public static bool IsValidPhone(string phone)
+        {
+            string phonePattern = @"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$";
+
+            if (string.IsNullOrEmpty(phone))
+                return false;
+
+            Regex regex = new Regex(phonePattern);
+            return regex.IsMatch(phone);
         }
 
         private void reserve1_Click(object sender, EventArgs e)
@@ -57,6 +69,19 @@ namespace WinFormsApp1
                 {
                     // Table is not available
                     MessageBox.Show("Sorry, the table is not available for booking.");
+                }
+            }
+        }
+
+        private void phone_Validating(object sender, CancelEventArgs e)
+        {
+            if (phone.Text != string.Empty)
+            {
+                if (!IsValidPhone(phone.Text))
+                {
+                    MessageBox.Show("phone not valid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    phone.SelectAll();
+                    e.Cancel = true;
                 }
             }
         }

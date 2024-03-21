@@ -49,6 +49,7 @@
             phone.PlaceholderText = "Phone Number";
             phone.Size = new Size(163, 23);
             phone.TabIndex = 1;
+            phone.Validating += phone_Validating;
             // 
             // tableID
             // 
